@@ -38,6 +38,7 @@ app.get("/", (req, res) => {
     message: "Hello World!",
   });
 });
+
 // router
 app.use("/api/logs", logs);
 
