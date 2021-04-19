@@ -26,7 +26,7 @@ const LogEntrySchema = new Schema(
     latitude: {
       ...requiredNumber,
       min: -90,
-      max: 90,
+      max: 89,
     },
     longitude: {
       ...requiredNumber,
