@@ -29,7 +29,7 @@ app.use(
   })
 );
 
-// body parsing middleware
+// body parsing middleware is already developed
 app.use(express.json());
 
 // another cahnge
