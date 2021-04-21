@@ -11,3 +11,12 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.marker{
+  
+  transform: translate(-50%,-100%);
+}
+
+.popup{
+  max-width: 300px;
+}

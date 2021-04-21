@@ -1,24 +1,31 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import ReactMapGL, { Marker } from "react-map-gl";
+import ReactMapGL, { Marker, Popup } from "react-map-gl";
 import { listLogEntries } from "./API";
 
 const App = () => {
   const [logEntries, setLogEntries] = useState([]);
+  const [showPopup, setShowPopUp] = React.useState({});
 
+  const initialLatitude = 10.250576;
+  const initialLongitude = -67.5977249;
   const [viewport, setViewport] = useState({
     width: "100vw",
     height: "100vh",
-    latitude: 10.250576,
-    longitude: -67.5977249,
-    zoom: 7,
+    latitude: initialLatitude,
+    longitude: initialLongitude,
+    zoom: 9,
   });
 
   useEffect(() => {
     (async () => {
       const logEntries = await listLogEntries();
       setLogEntries(logEntries);
-      console.log(logEntries);
+      logEntries.map((entry) => {
+        console.log(
+          "latitude: " + entry.latitude + "longitude: " + entry.longitude
+        );
+      });
     })();
   }, []);
   return (
@@ -29,16 +36,51 @@ const App = () => {
       mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
     >
       {/* esto no funciona arreglalo */}
+
       {logEntries.map((entry) => {
-        <Marker
-          key={entry._id}
-          latitude={entry.latitude}
-          longitude={entry.longitude}
-          offsetLeft={-20}
-          offsetTop={-10}
-        >
-          <div>Aqui estas</div>
-        </Marker>;
+        return (
+          <React.Fragment>
+            <Marker
+              key={entry._id}
+              latitude={entry.latitude}
+              longitude={entry.longitude}
+            >
+              <div
+                onClick={() => {
+                  setShowPopUp({
+                    // ...showPopup,
+                    [entry._id]: true,
+                  });
+                }}
+              >
+                <img
+                  className="marker"
+                  style={{
+                    height: `${3 * viewport.zoom}px`,
+                    width: `${3 * viewport.zoom}px`,
+                  }}
+                  src="https://i.imgur.com/y0G5YTX.png"
+                />
+              </div>
+            </Marker>
+
+            {showPopup[entry._id] ? (
+              <Popup
+                latitude={entry.latitude}
+                longitude={entry.longitude}
+                closeButton={true}
+                closeOnClick={false}
+                onClose={() => setShowPopUp({})}
+                anchor="top"
+              >
+                <div className="popup">
+                  <h4>{entry.title}</h4>
+                  <p>{entry.comments}</p>
+                </div>
+              </Popup>
+            ) : null}
+          </React.Fragment>
+        );
       })}
     </ReactMapGL>
   );
