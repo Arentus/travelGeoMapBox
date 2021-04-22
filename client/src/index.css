@@ -19,4 +19,20 @@ code {
 
 .popup{
   max-width: 300px;
+  padding: 1rem;
+}
+
+.marker path{
+  fill: #f3b73e;
+}
+.entryForm {
+  padding: 1rem;
+}
+.entryForm label, 
+.entryForm input, 
+.entryForm textarea, 
+.entryForm button {
+  margin: 0.5rem 0;
+  display: block;
+  width: 100%;
 }
