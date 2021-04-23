@@ -19,15 +19,14 @@ const App = () => {
     zoom: 7,
   });
 
+  const getEntries = async () => {
+    const logEntries = await listLogEntries();
+    setLogEntries(logEntries);
+  };
+
   useEffect(() => {
     (async () => {
-      const logEntries = await listLogEntries();
-      setLogEntries(logEntries);
-      logEntries.map((entry) => {
-        console.log(
-          "latitude: " + entry.latitude + "longitude: " + entry.longitude
-        );
-      });
+      getEntries();
     })();
   }, []);
 
@@ -52,12 +51,8 @@ const App = () => {
 
       {logEntries.map((entry) => {
         return (
-          <React.Fragment>
-            <Marker
-              key={entry._id}
-              latitude={entry.latitude}
-              longitude={entry.longitude}
-            >
+          <React.Fragment key={entry._id}>
+            <Marker latitude={entry.latitude} longitude={entry.longitude}>
               <div
                 onClick={() => {
                   setShowPopUp({
@@ -154,7 +149,13 @@ const App = () => {
             anchor="top"
           >
             <div className="popup">
-              <LogEntryForm />
+              <LogEntryForm
+                onClose={() => {
+                  setAddEntryLocation(null);
+                  getEntries();
+                }}
+                location={addEntryLocation}
+              />
             </div>
           </Popup>
         </>
